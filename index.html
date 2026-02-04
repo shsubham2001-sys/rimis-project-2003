@@ -3,282 +3,140 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rimi’s Special 💖</title>
+  <title>Fullscreen Slideshow + Music</title>
 
   <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto;}
-    <audio id="bgm" loop>
-  <source src="song.mp3" type="audio/mpeg">
-</audio>
-
-<button id="playMusic"
-  style="
-    position:fixed;
-    bottom:18px;
-    left:50%;
-    transform:translateX(-50%);
-    z-index:9999;
-    padding:12px 18px;
-    border-radius:16px;
-    border:1px solid rgba(255,255,255,0.18);
-    background:rgba(255,255,255,0.12);
-    color:white;
-    font-weight:800;
-    cursor:pointer;
-    backdrop-filter: blur(10px);
-  ">
-  ▶ Tap to Play Music
-</button>
-
-<script>
-  const bgm = document.getElementById("bgm");
-  const btn = document.getElementById("playMusic");
-
-  btn.addEventListener("click", async () => {
-    try{
-      await bgm.play();
-      btn.innerText = "🎵 Music Playing";
-      setTimeout(()=> btn.style.display="none", 1500);
-    }catch(e){
-      alert("Tap again ✅");
-    }
-  });
-</script> body{
-      height:100vh;
-      background:#000;
-      overflow:hidden;
+    body{
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: black;
+      overflow: hidden;
     }
 
-    /* SLIDES */
+    /* ✅ Fullscreen Slideshow */
     .slideshow{
-      position:fixed;
-      inset:0;
-      z-index:1;
-      background:#000;
+      width: 100%;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+      background: black;
     }
 
     .slide{
-      position:absolute;
-      inset:0;
-      background-size:cover;
-      background-position:center;
-      opacity:0;
-      transform:scale(1.08);
-      transition:opacity 1.2s ease;
-      filter: contrast(1.08) saturate(1.15) brightness(0.9);
-      animation: kenburns 5s linear infinite;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transform: scale(1.06);
+      transition: opacity 1.5s ease-in-out, transform 3.5s ease-in-out;
     }
 
-    .slide.active{opacity:1;}
-
-    @keyframes kenburns{
-      0%{transform:scale(1.08) translate(0,0);}
-      100%{transform:scale(1.18) translate(-1.2%,-1.2%);}
+    .slide.active{
+      opacity: 1;
+      transform: scale(1);
     }
 
-    /* OVERLAY */
-    .overlay{
-      position:fixed;
-      inset:0;
-      z-index:2;
-      background: radial-gradient(circle at center, rgba(0,0,0,0.20), rgba(0,0,0,0.78));
+    /* ✅ Greeting Text */
+    .greeting{
+      position: absolute;
+      bottom: 55px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      color: white;
+      font-size: 26px;
+      font-weight: bold;
+      text-shadow: 0px 0px 12px rgba(0,0,0,0.9);
+      z-index: 10;
+      padding: 10px 12px;
+      box-sizing: border-box;
     }
 
-    /* TEXT */
-    .textBox{
-      position:fixed;
-      left:50%;
-      bottom:55px;
-      transform:translateX(-50%);
-      z-index:3;
-      width:min(92vw,520px);
-      padding:14px 18px;
-      text-align:center;
-      border-radius:18px;
-      background:rgba(255,255,255,0.10);
-      border:1px solid rgba(255,255,255,0.15);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+    /* ✅ Music Button */
+    #musicBtn{
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      padding: 10px 16px;
+      font-size: 15px;
+      background: #ff4d6d;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      z-index: 9999;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
     }
-
-    .title{
-      color:rgba(255,255,255,0.95);
-      font-weight:900;
-      font-size:20px;
-      margin-bottom:6px;
-      text-shadow:0 10px 30px rgba(0,0,0,0.65);
-      animation: pop 900ms ease both;
-    }
-
-    .msg{
-      color:rgba(255,255,255,0.90);
-      font-weight:700;
-      font-size:16px;
-      text-shadow:0 10px 30px rgba(0,0,0,0.65);
-      animation: fadeIn 900ms ease both;
-    }
-
-    @keyframes pop{
-      0%{transform:translateY(12px);opacity:0}
-      100%{transform:translateY(0);opacity:1}
-    }
-
-    @keyframes fadeIn{
-      0%{opacity:0}
-      100%{opacity:1}
-    }
-
-    /* HEARTS */
-    .hearts{
-      position:fixed;
-      inset:0;
-      z-index:4;
-      pointer-events:none;
-    }
-
-    .heart{
-      position:absolute;
-      bottom:-30px;
-      width:18px;height:18px;
-      transform: rotate(45deg);
-      background: rgba(255, 70, 150, 0.78);
-      animation: floatUp linear forwards;
-      border-radius:4px;
-    }
-    .heart::before,.heart::after{
-      content:"";
-      position:absolute;
-      width:18px;height:18px;
-      background: rgba(255, 70, 150, 0.78);
-      border-radius:50%;
-    }
-    .heart::before{left:-9px;top:0;}
-    .heart::after{left:0;top:-9px;}
-
-    @keyframes floatUp{
-      0%{transform:translateY(0) rotate(45deg); opacity:0;}
-      10%{opacity:1;}
-      100%{transform:translateY(-110vh) rotate(45deg); opacity:0;}
-    }
-
-    /* SMALL NAME */
-    .from{
-      position:fixed;
-      top:18px;
-      left:50%;
-      transform:translateX(-50%);
-      z-index:3;
-      padding:8px 14px;
-      border-radius:999px;
-      background:rgba(0,0,0,0.35);
-      border:1px solid rgba(255,255,255,0.15);
-      color:rgba(255,255,255,0.88);
-      font-weight:800;
-      font-size:13px;
-      backdrop-filter: blur(10px);
-    }
- .collage{
-  position:fixed;
-  inset:0;
-  z-index:1;
-  background:#000;
-  overflow:hidden;
-}
-
-.frame{
-  position:absolute;
-  width:150px;
-  height:210px;
-  border-radius:18px;
-  overflow:hidden;
-  border:2px solid rgba(255,255,255,0.25);
-  box-shadow:0 18px 50px rgba(0,0,0,0.65);
-  background:rgba(255,255,255,0.08);
-}
-
-.frame img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.f1{top:18px; left:18px; transform:rotate(-8deg);}
-.f2{top:18px; right:18px; transform:rotate(8deg);}
-.f3{top:35%; left:12px; transform:rotate(-5deg);}
-.f4{top:35%; right:12px; transform:rotate(6deg);}
-.f5{bottom:18px; left:18px; transform:rotate(7deg);}
-.f6{bottom:18px; right:18px; transform:rotate(-7deg);} </style>
+  </style>
 </head>
 
 <body>
 
- <div class="collage">
-  <div class="frame f1"><img src="1.jpg.jpeg"></div>
-  <div class="frame f2"><img src="2.jpg.jpeg"></div>
-  <div class="frame f3"><img src="3.jpg.jpeg"></div>
-  <div class="frame f4"><img src="4.jpg.jpeg"></div>
-  <div class="frame f5"><img src="5.jpg.jpeg"></div>
-  <div class="frame f6"><img src="6.jpg.jpeg"></div>
-</div>
+  <!-- ✅ Play Music Button -->
+  <button onclick="playMusic()" id="musicBtn">▶ Play Music</button>
 
-  <div class="overlay"></div>
+  <!-- ✅ Background Music -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="song.mp3" type="audio/mpeg">
+  </audio>
 
-  <div class="from">💖 Rimi’s Special | From Subham</div>
+  <!-- ✅ Slideshow -->
+  <div class="slideshow">
+    <img src="1.jpg" class="slide active">
+    <img src="2.jpg" class="slide">
+    <img src="3.jpg" class="slide">
+    <img src="4.jpg" class="slide">
+    <img src="5.jpg" class="slide">
+    <img src="6.jpg" class="slide">
 
-  <div class="textBox">
-    <div class="title">Happy Birthday My Love 🎂❤️</div>
-    <div class="msg" id="msg">You are my favourite person 😘</div>
+    <div class="greeting" id="greetingText">
+      💖 Happy Valentine’s Day 💖
+    </div>
   </div>
 
-  <div class="hearts" id="hearts"></div>
-
   <script>
-    // SLIDES
+    /* ✅ Slideshow */
+    let index = 0;
     const slides = document.querySelectorAll(".slide");
-    let i = 0;
 
-    function nextSlide(){
-      slides[i].classList.remove("active");
-      i = (i + 1) % slides.length;
-      slides[i].classList.add("active");
-    }
+    setInterval(() => {
+      slides[index].classList.remove("active");
+      index = (index + 1) % slides.length;
+      slides[index].classList.add("active");
+    }, 3500); // ✅ slow/fast: 5000 slow, 2500 fast
 
-    setInterval(nextSlide, 2500); // fast smooth like video
-
-    // TEXT
-    const texts = [
-      "You are my favourite person 😘",
-      "Stay Happy Always 🌸✨",
-      "My World = You 🌍❤️",
-      "Forever Together 💑💫",
-      "I Love You So Much ❤️🥺",
-      "Happy Birthday Rimi 🎂❤️"
+    /* ✅ Greeting Text Change */
+    const greetings = [
+      "💖 Happy Valentine’s Day 💖",
+      "✨ You are my favorite person ✨",
+      "🌸 Always stay happy 🌸",
+      "😍 I Love You 😍",
+      "💝 Forever Together 💝",
+      "❤️ You are special ❤️"
     ];
-    let t = 0;
-    const msg = document.getElementById("msg");
 
-    function nextText(){
-      t = (t + 1) % texts.length;
-      msg.style.opacity = 0;
-      setTimeout(()=>{
-        msg.textContent = texts[t];
-        msg.style.opacity = 1;
-      }, 400);
-    }
-    setInterval(nextText, 2500);
+    let textIndex = 0;
+    const greetingText = document.getElementById("greetingText");
 
-    // HEARTS
-    const hearts = document.getElementById("hearts");
-    function heart(){
-      const h = document.createElement("div");
-      h.className = "heart";
-      h.style.left = Math.random() * 100 + "vw";
-      const dur = 4 + Math.random() * 4;
-      h.style.animationDuration = dur + "s";
-      hearts.appendChild(h);
-      setTimeout(()=>h.remove(), dur*1000);
+    setInterval(() => {
+      textIndex = (textIndex + 1) % greetings.length;
+      greetingText.innerText = greetings[textIndex];
+    }, 3500);
+
+    /* ✅ Music */
+    function playMusic(){
+      const music = document.getElementById("bgMusic");
+      music.volume = 1;
+      music.play().then(()=>{
+        document.getElementById("musicBtn").innerText = "🎵 Music Playing";
+      }).catch(()=>{
+        alert("Sound blocked! Browser site settings এ গিয়ে Sound Allow করো ✅");
+      });
     }
-    setInterval(heart, 350);
   </script>
 
 </body>
