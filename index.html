@@ -3,129 +3,108 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Collage Slideshow</title>
+  <title>Rimi's Birthday Collage</title>
 
   <style>
-    body{
-      margin:0;
-      padding:0;
-      font-family: Arial, sans-serif;
+    body {
+      margin: 0;
+      padding: 0;
       background: black;
       overflow: hidden;
+      font-family: Arial, sans-serif;
     }
 
-    .slideshow{
-      width: 100%;
+    /* ✅ Collage grid fixed full screen */
+    .collage {
+      width: 100vw;
       height: 100vh;
-      position: relative;
-      overflow: hidden;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 6px;
+      padding: 6px;
+      box-sizing: border-box;
     }
 
-    .slide{
+    .collage img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0;
-      transform: scale(1.06);
-      transition: opacity 1.5s ease-in-out, transform 3s ease-in-out;
+      border-radius: 10px;
+      transition: transform 0.3s ease;
     }
 
-    .slide.active{
-      opacity: 1;
-      transform: scale(1);
+    .collage img:hover {
+      transform: scale(1.05);
     }
 
-    .greeting{
-      position: absolute;
-      bottom: 60px;
+    /* ✅ Floating text */
+    .text {
+      position: fixed;
+      top: 15px;
       width: 100%;
       text-align: center;
-      font-size: 26px;
-      font-weight: bold;
       color: white;
-      text-shadow: 0px 0px 10px rgba(0,0,0,0.8);
+      font-size: 22px;
+      font-weight: bold;
+      text-shadow: 0 0 10px rgba(255,255,255,0.7);
       z-index: 10;
-      padding: 10px;
     }
 
-    #musicBtn{
+    /* ✅ Music button */
+    .music-btn {
       position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 10px 18px;
-      font-size: 16px;
-      background: #ff4d6d;
-      color: white;
+      bottom: 15px;
+      right: 15px;
+      z-index: 10;
+      padding: 10px 15px;
       border: none;
       border-radius: 12px;
+      background: #ff4d6d;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
       cursor: pointer;
-      z-index: 9999;
-      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+      box-shadow: 0 0 10px rgba(255,77,109,0.6);
     }
   </style>
 </head>
-
 <body>
 
-  <!-- ✅ Play Music Button -->
-  <button onclick="playMusic()" id="musicBtn">▶ Play Music</button>
+  <div class="text">🎂 Happy Birthday Rimi ❤️</div>
+
+  <!-- ✅ Collage Section -->
+  <div class="collage">
+    <img src="img1.jpg" />
+    <img src="img2.jpg" />
+    <img src="img3.jpg" />
+    <img src="img4.jpg" />
+    <img src="img5.jpg" />
+    <img src="img6.jpg" />
+    <img src="img7.jpg" />
+    <img src="img8.jpg" />
+    <img src="img9.jpg" />
+  </div>
 
   <!-- ✅ Background Music -->
   <audio id="bgMusic" loop>
     <source src="song.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- ✅ Slideshow -->
-  <div class="slideshow">
-    <img src="1.jpg" class="slide active">
-    <img src="2.jpg" class="slide">
-    <img src="3.jpg" class="slide">
-    <img src="4.jpg" class="slide">
-    <img src="5.jpg" class="slide">
-    <img src="6.jpg" class="slide">
-
-    <div class="greeting" id="greetingText">
-      💖 Happy Valentine’s Day 💖
-    </div>
-  </div>
+  <button class="music-btn" onclick="toggleMusic()">🎵 Play Music</button>
 
   <script>
-    // ✅ Slideshow animation
-    let index = 0;
-    const slides = document.querySelectorAll(".slide");
+    const music = document.getElementById("bgMusic");
+    const btn = document.querySelector(".music-btn");
 
-    setInterval(() => {
-      slides[index].classList.remove("active");
-      index = (index + 1) % slides.length;
-      slides[index].classList.add("active");
-    }, 3500); // ✅ 3.5 sec per photo
-
-    // ✅ Greeting texts
-    const greetings = [
-      "💖 Happy Valentine’s Day 💖",
-      "✨ You are my favorite person ✨",
-      "🌸 Stay happy always 🌸",
-      "😍 I Love You 😍",
-      "💝 Forever Together 💝",
-      "❤️ You are special ❤️"
-    ];
-
-    let textIndex = 0;
-    const greetingText = document.getElementById("greetingText");
-
-    setInterval(() => {
-      textIndex = (textIndex + 1) % greetings.length;
-      greetingText.innerText = greetings[textIndex];
-    }, 3500);
-
-    // ✅ Music play (must click button)
-    function playMusic(){
-      const music = document.getElementById("bgMusic");
-      music.play();
-      document.getElementById("musicBtn").innerText = "🎵 Music Playing";
+    function toggleMusic() {
+      if (music.paused) {
+        music.play();
+        btn.innerText = "⏸ Pause Music";
+      } else {
+        music.pause();
+        btn.innerText = "🎵 Play Music";
+      }
     }
   </script>
 
