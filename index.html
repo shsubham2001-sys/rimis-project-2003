@@ -3,24 +3,60 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rimi Project</title>
+  <title>My Collage Slideshow</title>
 
   <style>
     body{
-      margin: 0;
-      padding: 0;
+      margin:0;
+      padding:0;
       font-family: Arial, sans-serif;
-      background: #0b0b0b;
+      background: black;
       overflow: hidden;
     }
 
-    /* ✅ Music Button */
+    .slideshow{
+      width: 100%;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transform: scale(1.06);
+      transition: opacity 1.5s ease-in-out, transform 3s ease-in-out;
+    }
+
+    .slide.active{
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .greeting{
+      position: absolute;
+      bottom: 60px;
+      width: 100%;
+      text-align: center;
+      font-size: 26px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 0px 0px 10px rgba(0,0,0,0.8);
+      z-index: 10;
+      padding: 10px;
+    }
+
     #musicBtn{
       position: fixed;
-      top: 18px;
-      right: 18px;
-      padding: 10px 16px;
-      font-size: 15px;
+      top: 20px;
+      right: 20px;
+      padding: 10px 18px;
+      font-size: 16px;
       background: #ff4d6d;
       color: white;
       border: none;
@@ -28,72 +64,6 @@
       cursor: pointer;
       z-index: 9999;
       box-shadow: 0 0 15px rgba(0,0,0,0.4);
-    }
-
-    .container{
-      width: 100%;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 18px;
-      box-sizing: border-box;
-    }
-
-    /* ✅ Collage Grid (Same) */
-    .collage{
-      width: 92vw;
-      max-width: 900px;
-      height: 85vh;
-      max-height: 650px;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
-      gap: 12px;
-      border-radius: 22px;
-      padding: 12px;
-      background: rgba(255,255,255,0.05);
-      box-shadow: 0 0 25px rgba(0,0,0,0.6);
-      position: relative;
-    }
-
-    .collage img{
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 18px;
-      animation: zoomEffect 6s infinite alternate;
-    }
-
-    @keyframes zoomEffect{
-      0% { transform: scale(1); }
-      100% { transform: scale(1.06); }
-    }
-
-    .greeting{
-      position: absolute;
-      bottom: 15px;
-      left: 0;
-      width: 100%;
-      text-align: center;
-      color: white;
-      font-size: 22px;
-      font-weight: bold;
-      text-shadow: 0px 0px 10px rgba(0,0,0,0.8);
-      padding: 10px 0;
-    }
-
-    /* ✅ Mobile Responsive */
-    @media (max-width: 600px){
-      .collage{
-        width: 95vw;
-        height: 88vh;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr 1fr;
-      }
-      .greeting{
-        font-size: 18px;
-      }
     }
   </style>
 </head>
@@ -104,33 +74,40 @@
   <button onclick="playMusic()" id="musicBtn">▶ Play Music</button>
 
   <!-- ✅ Background Music -->
-  <audio id="bgMusic" loop preload="auto">
+  <audio id="bgMusic" loop>
     <source src="song.mp3" type="audio/mpeg">
   </audio>
 
-  <div class="container">
-    <div class="collage">
+  <!-- ✅ Slideshow -->
+  <div class="slideshow">
+    <img src="1.jpg" class="slide active">
+    <img src="2.jpg" class="slide">
+    <img src="3.jpg" class="slide">
+    <img src="4.jpg" class="slide">
+    <img src="5.jpg" class="slide">
+    <img src="6.jpg" class="slide">
 
-      <!-- ✅ 6 Photos -->
-      <img src="1.jpg" alt="photo1">
-      <img src="2.jpg" alt="photo2">
-      <img src="3.jpg" alt="photo3">
-      <img src="4.jpg" alt="photo4">
-      <img src="5.jpg" alt="photo5">
-      <img src="6.jpg" alt="photo6">
-
-      <div class="greeting" id="greetingText">
-        💖 Happy Valentine’s Day 💖
-      </div>
+    <div class="greeting" id="greetingText">
+      💖 Happy Valentine’s Day 💖
     </div>
   </div>
 
   <script>
-    // ✅ Greeting text change
+    // ✅ Slideshow animation
+    let index = 0;
+    const slides = document.querySelectorAll(".slide");
+
+    setInterval(() => {
+      slides[index].classList.remove("active");
+      index = (index + 1) % slides.length;
+      slides[index].classList.add("active");
+    }, 3500); // ✅ 3.5 sec per photo
+
+    // ✅ Greeting texts
     const greetings = [
       "💖 Happy Valentine’s Day 💖",
       "✨ You are my favorite person ✨",
-      "🌸 Always stay happy 🌸",
+      "🌸 Stay happy always 🌸",
       "😍 I Love You 😍",
       "💝 Forever Together 💝",
       "❤️ You are special ❤️"
@@ -142,17 +119,13 @@
     setInterval(() => {
       textIndex = (textIndex + 1) % greetings.length;
       greetingText.innerText = greetings[textIndex];
-    }, 2500);
+    }, 3500);
 
-    // ✅ Music play (must click)
+    // ✅ Music play (must click button)
     function playMusic(){
       const music = document.getElementById("bgMusic");
-      music.volume = 1;
-      music.play().then(()=>{
-        document.getElementById("musicBtn").innerText = "🎵 Music Playing";
-      }).catch(()=>{
-        alert("Sound blocked! Site settings এ গিয়ে Sound Allow করো ✅");
-      });
+      music.play();
+      document.getElementById("musicBtn").innerText = "🎵 Music Playing";
     }
   </script>
 
